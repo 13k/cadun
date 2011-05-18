@@ -7,7 +7,3 @@ require 'nokogiri'
 require 'date'
 require 'cadun/gateway'
 require 'cadun/user'
-
-module Cadun
-  VERSION = "0.0.1"
-end
