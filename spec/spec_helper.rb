@@ -24,3 +24,7 @@ def stub_requests
   FakeWeb.register_uri :get, "http://isp-authenticator.dev.globoi.com:8280/cadunii/ws/resources/pessoa/21737810", 
                        :body => File.join(File.dirname(__FILE__), "support", "fixtures", "pessoa.xml")
 end
+
+def load_config
+  Cadun::Config.load_file File.join(File.dirname(__FILE__), "support", "fixtures", "config.yml")
+end

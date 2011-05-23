@@ -1,0 +1,5 @@
+cadun:
+  logout_url: https://login.globo.com/Servlet/do/logout
+  login_url: https://login.globo.com/login
+  auth_url: autenticacao.globo.com
+  auth_port: 8080

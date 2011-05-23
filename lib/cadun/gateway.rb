@@ -17,16 +17,7 @@ module Cadun
     end
 
     def connection
-      @connection ||= Net::HTTP.new(*(development? ? ["isp-authenticator.dev.globoi.com", 8280] : ["autenticacao.globo.com", 8080] ))
-    end
-
-    protected
-    def development?
-      if defined?(Rails)
-        Rails.env.development?
-      else
-        true
-      end
+      @connection ||= Net::HTTP.new(*[Config.auth_url, Config.auth_port])
     end
   end
 end

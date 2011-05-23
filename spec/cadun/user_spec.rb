@@ -3,7 +3,10 @@ require 'spec_helper'
 
 describe Cadun::User do
   
-  before { stub_requests }
+  before do
+    load_config
+    stub_requests
+  end
   
   subject { Cadun::User.new("GLB_ID", "127.0.0.1", 2626) }
   

@@ -1,6 +1,8 @@
 require 'spec_helper'
 
-describe Cadun::Gateway do  
+describe Cadun::Gateway do
+  before { load_config }
+  
   subject { Cadun::Gateway.new("GLB_ID", "127.0.0.1", 2626) }
   
   describe "#content" do
@@ -15,26 +17,6 @@ describe Cadun::Gateway do
       mock(subject).connection { connection }
       
       subject.content.xpath('nome').text.should == 'Barack Obama'
-    end
-  end
-  
-  describe "#connection" do
-    context "when the environment is development" do
-      before { mock(subject).development? { true } }
-      
-      it "should request from the development server" do
-        mock(Net::HTTP).new("isp-authenticator.dev.globoi.com", 8280)
-        subject.connection
-      end
-    end
-    
-    context "when the environment is not development" do
-      before { mock(subject).development? { false } }
-      
-      it "should request from the production server" do
-        mock(Net::HTTP).new("autenticacao.globo.com", 8080)
-        subject.connection
-      end
     end
   end
   
