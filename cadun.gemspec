@@ -1,23 +1,21 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path('../lib', __FILE__)
-require "cadun/version"
+require "#{File.dirname(__FILE__)}/lib/cadun/version"
 
 Gem::Specification.new do |s|
-  s.name        = "cadun"
-  s.version     = Cadun::VERSION::STRING
-  s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Bruno Azisaka Maciel"]
-  s.email       = ["bruno@azisaka.com.br"]
-  s.homepage    = ""
-  s.summary     = ""
-  s.description = ""
+  s.name              = 'cadun'
+  s.version           = Cadun::VERSION::STRING
+  s.platform          = Gem::Platform::RUBY
+  s.authors           = %w(Bruno Azisaka Maciel)
+  s.email             = %w(bruno@azisaka.com.br)
+  s.homepage          = 'https://github.com/azisaka/Cadun'
+  s.summary           = 'A wrapper for the CadUn authentication/authorization API'
+  s.description       = 'A wrapper for the CadUn authentication/authorization API'
 
-  s.rubyforge_project = "cadun"
+  s.rubyforge_project = 'cadun'
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
+  s.files             = `git ls-files`.split("\n")
+  s.test_files        = `git ls-files -- {spec}/*`.split("\n")
+  s.require_paths     = %w(lib)
   
   s.add_dependency 'nokogiri'
   s.add_development_dependency 'rack'

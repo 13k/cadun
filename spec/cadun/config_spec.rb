@@ -1,61 +1,35 @@
 require 'spec_helper'
 
 describe Cadun::Config do
-  before do
-    Cadun::Config.load_file File.join(File.dirname(__FILE__), "..", "support", "fixtures", "config.yml")
+  include Cadun
+
+  def self.verify_method(method, value)
+    describe "##{method}" do
+      subject { Cadun::Config.send(method) }
+
+      specify { should == value }
+    end
   end
   
-  describe "#login_url" do
-    subject { Cadun::Config.login_url }
-
-    specify { should == "https://login.dev.globoi.com/login" }
-  end
+  before { load_config }
   
-  describe "#logout_url" do
-    subject { Cadun::Config.logout_url }
-
-    specify { should == "https://login.dev.globoi.com/Servlet/do/logout" }
-  end
-  
-  describe "#auth_url" do
-    subject { Cadun::Config.auth_url }
-
-    specify { should == "isp-authenticator.dev.globoi.com" }
-  end
-  
-  describe "#auth_port" do
-    subject { Cadun::Config.auth_port }
-
-    specify { should == 8280 }
-  end
+  verify_method "login_url", "https://login.dev.globoi.com/login"
+                
+  verify_method "logout_url", "https://login.dev.globoi.com/Servlet/do/logout"
+                
+  verify_method "auth_url", "isp-authenticator.dev.globoi.com"
+                
+  verify_method "auth_port", 8280
   
   context "when the file changes" do
-    before do
-      Cadun::Config.load_file File.join(File.dirname(__FILE__), "..", "support", "fixtures", "another_config.yml")
-    end
+    before { load_another_config }
 
-    describe "#login_url" do
-      subject { Cadun::Config.login_url }
-
-      specify { should == "https://login.globo.com/login" }
-    end
-
-    describe "#logout_url" do
-      subject { Cadun::Config.logout_url }
-
-      specify { should == "https://login.globo.com/Servlet/do/logout" }
-    end
-
-    describe "#auth_url" do
-      subject { Cadun::Config.auth_url }
-
-      specify { should == "autenticacao.globo.com" }
-    end
-
-    describe "#auth_port" do
-      subject { Cadun::Config.auth_port }
-
-      specify { should == 8080 }
-    end
+    verify_method "login_url", "https://login.globo.com/login"
+                  
+    verify_method "logout_url", "https://login.globo.com/Servlet/do/logout"
+                  
+    verify_method "auth_url", "autenticacao.globo.com"
+                  
+    verify_method "auth_port", 8080
   end
 end

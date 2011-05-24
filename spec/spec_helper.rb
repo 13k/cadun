@@ -19,12 +19,16 @@ end
 
 def stub_requests
   FakeWeb.register_uri :put, "http://isp-authenticator.dev.globoi.com:8280/ws/rest/autorizacao",
-                       :body => File.join(File.dirname(__FILE__), "support", "fixtures", "autorizacao.xml")
+                       :body => "#{File.dirname(__FILE__)}/support/fixtures/autorizacao.xml"
 
   FakeWeb.register_uri :get, "http://isp-authenticator.dev.globoi.com:8280/cadunii/ws/resources/pessoa/21737810", 
-                       :body => File.join(File.dirname(__FILE__), "support", "fixtures", "pessoa.xml")
+                       :body => "#{File.dirname(__FILE__)}/support/fixtures/pessoa.xml"
 end
 
 def load_config
-  Cadun::Config.load_file File.join(File.dirname(__FILE__), "support", "fixtures", "config.yml")
+  Cadun::Config.load_file "#{File.dirname(__FILE__)}/support/fixtures/config.yml"
+end
+
+def load_another_config
+  Cadun::Config.load_file "#{File.dirname(__FILE__)}/support/fixtures/another_config.yml"
 end

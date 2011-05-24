@@ -6,7 +6,7 @@ module Cadun
       "nome"                     => "name", 
       "emailPrincipal"           => "email", 
       "sexo"                     => "gender",
-      "bairro"                   => "suburb", 
+      "bairro"                   => "neighborhood", 
       "cidade/nome"              => "city", 
       "estado/sigla"             => "state",
       "pais/nome"                => "country" }.each do |path, method|
