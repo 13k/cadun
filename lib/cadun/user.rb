@@ -14,7 +14,7 @@ module Cadun
     end
     
     def initialize(glb_id, ip, service_id)
-      @gateway = Gateway.new(@glb_id, @ip, @service_id)
+      @gateway = Gateway.new(glb_id, ip, service_id)
     end
     
     def address

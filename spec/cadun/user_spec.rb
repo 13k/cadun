@@ -8,6 +8,11 @@ describe Cadun::User do
     stub_requests
   end
   
+  it "should load a gateway" do
+    mock(Cadun::Gateway).new("GLB_ID", "127.0.0.1", 2626)
+    Cadun::User.new("GLB_ID", "127.0.0.1", 2626)
+  end
+  
   subject { Cadun::User.new("GLB_ID", "127.0.0.1", 2626) }
   
   describe "#id" do
