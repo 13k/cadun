@@ -2,7 +2,7 @@ module Cadun
   class User
     attr_reader :gateway
     
-    { "id"                       => "id", 
+    { "id"                       => "user_id", 
       "nome"                     => "name", 
       "emailPrincipal"           => "email",
       "tipoUsuario"              => "user_type", 
@@ -10,9 +10,12 @@ module Cadun
       "bairro"                   => "neighborhood", 
       "cidade/nome"              => "city", 
       "estado/sigla"             => "state",
-      "pais/nome"                => "country" }.each do |path, method|
+      "pais/nome"                => "country",
+      "cep"                      => "zipcode" }.each do |path, method|
       define_method(method) { gateway.content.xpath(path).text }
     end
+    
+    alias :id :user_id
     
     def initialize(options = {})
       @gateway = Gateway.new(options)
@@ -32,6 +35,10 @@ module Cadun
     
     def mobile
       "#{telefoneCelularDdd} #{telefoneCelular}"
+    end
+    
+    def to_hash      
+      %w(user_id name email user_type gender neighborhood city state country address birthday phone mobile login cpf zipcode status).inject(Hash.new(0)) { |hash, method| hash[method.to_sym] = send(method); hash }
     end
     
     def method_missing(method)

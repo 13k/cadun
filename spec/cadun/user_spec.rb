@@ -53,18 +53,42 @@ describe Cadun::User do
     verify_method "country", "Brasil"
 
     verify_method "user_type", "NAO_ASSINANTE"
+    
+    verify_method "user_id", "21737810"
   end
   
   context "when the user id is given" do
-    subject { Cadun::User.new :user_id => "10001000", :ip => "127.0.0.1" }
+    subject { Cadun::User.new :user_id => "10001000" }
     
     it "should load the gateway" do
-      mock(Cadun::Gateway).new(hash_including(:ip => "127.0.0.1", :user_id => "10001000"))
+      mock(Cadun::Gateway).new(hash_including(:user_id => "10001000"))
       subject
     end
 
     verify_method "id", "10001000"
 
     verify_method "name", "Guilherme Chico"
+  end
+  
+  describe "#to_hash" do
+    subject { Cadun::User.new(:user_id => "10001000").to_hash }
+    
+    specify { should include(:user_id => "10001000") }
+    specify { should include(:name => "Guilherme Chico") }
+    specify { should include(:email => "fab1@spam.la") }
+    specify { should include(:user_type => "NAO_ASSINANTE") }
+    specify { should include(:gender => "MASCULINO") }
+    specify { should include(:neighborhood => "Andaraí") }
+    specify { should include(:city => "Rio de Janeiro") }
+    specify { should include(:state => "RJ") }
+    specify { should include(:country => "Brasil") }
+    specify { should include(:address => "Rua Uruguai, 59") }
+    specify { should include(:birthday => Date.new(1983, 02, 22)) }
+    specify { should include(:phone => "21 22881060") }
+    specify { should include(:mobile => "21 99999999") }
+    specify { should include(:login => "fabricio_fab1") }
+    specify { should include(:cpf => "09532034765") }
+    specify { should include(:zipcode => "20510060") }
+    specify { should include(:status => "ATIVO") }
   end
 end
