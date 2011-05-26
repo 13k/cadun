@@ -4,7 +4,8 @@ module Cadun
     
     { "id"                       => "id", 
       "nome"                     => "name", 
-      "emailPrincipal"           => "email", 
+      "emailPrincipal"           => "email",
+      "tipoUsuario"              => "user_type", 
       "sexo"                     => "gender",
       "bairro"                   => "neighborhood", 
       "cidade/nome"              => "city", 
@@ -13,8 +14,8 @@ module Cadun
       define_method(method) { gateway.content.xpath(path).text }
     end
     
-    def initialize(glb_id, ip, service_id)
-      @gateway = Gateway.new(glb_id, ip, service_id)
+    def initialize(options = {})
+      @gateway = Gateway.new(options)
     end
     
     def address

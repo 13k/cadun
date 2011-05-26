@@ -9,7 +9,7 @@ describe Cadun::Gateway do
     mock(subject).connection { connection }
   end
   
-  subject { Cadun::Gateway.new("GLB_ID", "127.0.0.1", 2626) }
+  subject { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
   
   describe "#content" do
     before do

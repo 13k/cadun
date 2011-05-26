@@ -1,7 +1,7 @@
 module Cadun
   class Gateway
-    def initialize(glb_id, ip, service_id)
-      @glb_id, @ip, @service_id = glb_id, ip, service_id
+    def initialize(options = {})
+      @options = options 
     end
 
     def content
@@ -18,7 +18,7 @@ module Cadun
     
     protected
     def content_resource
-      get "/cadunii/ws/resources/pessoa/#{authorization.xpath("usuarioID").text}"
+      get "/cadunii/ws/resources/pessoa/#{@options[:user_id] || authorization.xpath("usuarioID").text}"
     end
 
     def get(path)
@@ -26,7 +26,7 @@ module Cadun
     end
     
     def authorization_resource
-      put "/ws/rest/autorizacao", "<usuarioAutorizado><glbId>#{@glb_id}</glbId><ip>#{@ip}</ip><servicoID>#{@service_id}</servicoID></usuarioAutorizado>"
+      put "/ws/rest/autorizacao", "<usuarioAutorizado><glbId>#{@options[:glb_id]}</glbId><ip>#{@options[:ip]}</ip><servicoID>#{@options[:service_id]}</servicoID></usuarioAutorizado>"
     end
     
     def put(path, data)

@@ -2,9 +2,6 @@
 require 'spec_helper'
 
 describe Cadun::User do
-  include Cadun
-  
-  subject { User.new "GLB_ID", "127.0.0.1", 2626 }
   
   def self.verify_method(method, value)
     describe "##{method}" do
@@ -17,38 +14,57 @@ describe Cadun::User do
     stub_requests
   end
   
-  it "should load the gateway" do
-    mock(Gateway).new "GLB_ID", "127.0.0.1", 2626
-    subject
+  context "when the user id is not given" do
+    subject { Cadun::User.new :ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID" }
+    
+    it "should load the gateway" do
+      mock(Cadun::Gateway).new(hash_including(:ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID"))
+      subject
+    end
+
+    verify_method "id", "21737810"
+
+    verify_method "name", "Fabricio Rodrigo Lopes"
+
+    verify_method "birthday", Date.new(1983, 02, 22)
+
+    verify_method "phone", "21 22881060"
+
+    verify_method "mobile", "21 99999999"
+
+    verify_method "email", "fab1@spam.la"
+
+    verify_method "gender", "MASCULINO"
+
+    verify_method "city", "Rio de Janeiro"
+
+    verify_method "state", "RJ"
+
+    verify_method "status", "ATIVO"
+
+    verify_method "address", "Rua Uruguai, 59"
+
+    verify_method "neighborhood", "Andaraí"
+
+    verify_method "cpf", "09532034765"
+
+    verify_method "login", "fabricio_fab1"
+
+    verify_method "country", "Brasil"
+
+    verify_method "user_type", "NAO_ASSINANTE"
   end
-                
-  verify_method "id", "21737810"
-                
-  verify_method "name", "Fabricio Rodrigo Lopes"
-                
-  verify_method "birthday", Date.new(1983, 02, 22)
-                
-  verify_method "phone", "21 22881060"
-                
-  verify_method "mobile", "21 99999999"
-                
-  verify_method "email", "fab1@spam.la"
-                
-  verify_method "gender", "MASCULINO"
-                
-  verify_method "city", "Rio de Janeiro"
-                
-  verify_method "state", "RJ"
-                
-  verify_method "status", "ATIVO"
-                
-  verify_method "address", "Rua Uruguai, 59"
-                
-  verify_method "neighborhood", "Andaraí"
-                
-  verify_method "cpf", "09532034765"
-                
-  verify_method "login", "fabricio_fab1"
-                
-  verify_method "country", "Brasil"
+  
+  context "when the user id is given" do
+    subject { Cadun::User.new :user_id => "10001000", :ip => "127.0.0.1" }
+    
+    it "should load the gateway" do
+      mock(Cadun::Gateway).new(hash_including(:ip => "127.0.0.1", :user_id => "10001000"))
+      subject
+    end
+
+    verify_method "id", "10001000"
+
+    verify_method "name", "Guilherme Chico"
+  end
 end

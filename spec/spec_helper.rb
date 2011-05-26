@@ -23,6 +23,9 @@ def stub_requests
 
   FakeWeb.register_uri :get, "http://isp-authenticator.dev.globoi.com:8280/cadunii/ws/resources/pessoa/21737810", 
                        :body => "#{File.dirname(__FILE__)}/support/fixtures/pessoa.xml"
+                       
+  FakeWeb.register_uri :get, "http://isp-authenticator.dev.globoi.com:8280/cadunii/ws/resources/pessoa/10001000", 
+                       :body => "#{File.dirname(__FILE__)}/support/fixtures/pessoa_2.xml"
 end
 
 def load_config
