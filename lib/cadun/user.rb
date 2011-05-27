@@ -11,7 +11,8 @@ module Cadun
       "cidade/nome"              => "city", 
       "estado/sigla"             => "state",
       "pais/nome"                => "country",
-      "cep"                      => "zipcode" }.each do |path, method|
+      "cep"                      => "zipcode",
+      "complemento"              => "complement" }.each do |path, method|
       define_method(method) { gateway.content.xpath(path).text }
     end
     
@@ -38,7 +39,7 @@ module Cadun
     end
     
     def to_hash      
-      %w(user_id name email user_type gender neighborhood city state country address birthday phone mobile login cpf zipcode status).inject(Hash.new(0)) { |hash, method| hash[method.to_sym] = send(method); hash }
+      %w(user_id name email user_type gender neighborhood city state country address birthday phone mobile login cpf zipcode status complement).inject(Hash.new(0)) { |hash, method| hash[method.to_sym] = send(method); hash }
     end
     
     def method_missing(method)

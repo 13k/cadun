@@ -55,6 +55,8 @@ describe Cadun::User do
     verify_method "user_type", "NAO_ASSINANTE"
     
     verify_method "user_id", "21737810"
+    
+    verify_method "complement", "807"
   end
   
   context "when the user id is given" do
@@ -90,5 +92,6 @@ describe Cadun::User do
     specify { should include(:cpf => "09532034765") }
     specify { should include(:zipcode => "20510060") }
     specify { should include(:status => "ATIVO") }
+    specify { should include(:complement => "807") }
   end
 end
