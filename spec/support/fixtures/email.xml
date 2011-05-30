@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pessoa>
+  <id>24510533</id>
+  <alteracao>2011-05-05T00:00:00-03:00</alteracao>
+  <bairro>Barra da Tijuca</bairro>
+  <cep>22793380</cep>
+  <cidade>
+    <estadoId>19</estadoId>
+    <id>7043</id>
+    <nome>Rio de Janeiro</nome>
+  </cidade>
+  <cidadeId>7043</cidadeId>
+  <complemento>AP 1711</complemento>
+  <cookie>000009gUMBNm3lygWTdpVUbWm6Ha7yWK</cookie>
+  <cpf>05359742720</cpf>
+  <criacao>2008-08-07T00:00:00-03:00</criacao>
+  <dadosAdicionais>
+    <atualizacao>2009-09-29T05:30:01-03:00</atualizacao>
+    <componenteId>21</componenteId>
+    <criacao>2008-08-07T01:52:30-03:00</criacao>
+    <usuarioId>24510533</usuarioId>
+    <valor>1759250SSPES</valor>
+  </dadosAdicionais>
+  <dataNascimento>1981-12-23T00:00:00-03:00</dataNascimento>
+  <emailPrincipal>silvano@corp.globo.com</emailPrincipal>
+  <endereco>Avenida Adolpho de Vasconcelos</endereco>
+  <estado>
+    <id>19</id>
+    <nome>Rio de Janeiro</nome>
+    <paisId>1</paisId>
+    <sigla>RJ</sigla>
+  </estado>
+  <estadoId>19</estadoId>
+  <login>silvano.silvano.2008</login>
+  <nome>Silvano Nogueira Buback</nome>
+  <numero>401</numero>
+  <optinCelular>false</optinCelular>
+  <optinGlobo>true</optinGlobo>
+  <optinParceiros>true</optinParceiros>
+  <origemId>181</origemId>
+  <pais>
+    <id>1</id>
+    <nome>Brasil</nome>
+    <sigla>BR</sigla>
+  </pais>
+  <paisId>1</paisId>
+  <perguntaId>2</perguntaId>
+  <resposta>astor</resposta>
+  <servicoOrigemId>807</servicoOrigemId>
+  <sexo>MASCULINO</sexo>
+  <status>ATIVO</status>
+  <telefoneCelular>82503193</telefoneCelular>
+  <telefoneCelularDdd>21</telefoneCelularDdd>
+  <telefoneResidencial>32171000</telefoneResidencial>
+  <telefoneResidencialDdd>21</telefoneResidencialDdd>
+  <tipoUsuario>NAO_ASSINANTE</tipoUsuario>
+</pessoa>

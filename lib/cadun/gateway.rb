@@ -18,7 +18,15 @@ module Cadun
     
     protected
     def content_resource
-      get "/cadunii/ws/resources/pessoa/#{@options[:user_id] || authorization.xpath("usuarioID").text}"
+      subject = if @options[:email]
+        "email/#{@options[:email]}"
+      elsif @options[:cadun_id]
+        @options[:cadun_id]
+      else
+        authorization.xpath("usuarioID").text
+      end
+      
+      get "/cadunii/ws/resources/pessoa/#{subject}"
     end
 
     def get(path)

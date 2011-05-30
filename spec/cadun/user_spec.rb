@@ -54,28 +54,15 @@ describe Cadun::User do
 
     verify_method "user_type", "NAO_ASSINANTE"
     
-    verify_method "user_id", "21737810"
+    verify_method "cadun_id", "21737810"
     
     verify_method "complement", "807"
   end
   
-  context "when the user id is given" do
-    subject { Cadun::User.new :user_id => "10001000" }
-    
-    it "should load the gateway" do
-      mock(Cadun::Gateway).new(hash_including(:user_id => "10001000"))
-      subject
-    end
-
-    verify_method "id", "10001000"
-
-    verify_method "name", "Guilherme Chico"
-  end
-  
   describe "#to_hash" do
-    subject { Cadun::User.new(:user_id => "10001000").to_hash }
+    subject { Cadun::User.new(:cadun_id => "10001000").to_hash }
     
-    specify { should include(:user_id => "10001000") }
+    specify { should include(:cadun_id => "10001000") }
     specify { should include(:name => "Guilherme Chico") }
     specify { should include(:email => "fab1@spam.la") }
     specify { should include(:user_type => "NAO_ASSINANTE") }
@@ -93,5 +80,25 @@ describe Cadun::User do
     specify { should include(:zipcode => "20510060") }
     specify { should include(:status => "ATIVO") }
     specify { should include(:complement => "807") }
+  end
+  
+  describe ".find_by_email" do
+    context "given an email without domain" do
+      subject { Cadun::User.find_by_email("silvano") }
+      
+      verify_method "id", "24510533"
+    end
+    
+    context "given an email with domain" do
+      subject { Cadun::User.find_by_email("silvano@corp.globo.com") }
+      
+      verify_method "id", "24510533"
+    end
+  end
+  
+  describe ".find_by_id" do
+    subject { Cadun::User.find_by_id("10001000") }
+
+    verify_method "id", "10001000"
   end
 end

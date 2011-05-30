@@ -2,7 +2,7 @@ module Cadun
   class User
     attr_reader :gateway
     
-    { "id"                       => "user_id", 
+    { "id"                       => "cadun_id", 
       "nome"                     => "name", 
       "emailPrincipal"           => "email",
       "tipoUsuario"              => "user_type", 
@@ -16,7 +16,16 @@ module Cadun
       define_method(method) { gateway.content.xpath(path).text }
     end
     
-    alias :id :user_id
+    alias :id :cadun_id
+    
+    def self.find_by_email(email)
+      email = "#{email}@globo.com" unless email =~ /^.*@.*$/
+      new(:email => email)
+    end
+    
+    def self.find_by_id(cadun_id)
+      new(:cadun_id => cadun_id)
+    end
     
     def initialize(options = {})
       @gateway = Gateway.new(options)
@@ -39,7 +48,7 @@ module Cadun
     end
     
     def to_hash      
-      %w(user_id name email user_type gender neighborhood city state country address birthday phone mobile login cpf zipcode status complement).inject(Hash.new(0)) { |hash, method| hash[method.to_sym] = send(method); hash }
+      %w(cadun_id name email user_type gender neighborhood city state country address birthday phone mobile login cpf zipcode status complement).inject(Hash.new(0)) { |hash, method| hash[method.to_sym] = send(method); hash }
     end
     
     def method_missing(method)
