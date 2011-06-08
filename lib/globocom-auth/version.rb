@@ -4,6 +4,6 @@ module GloboComAuth
     MINOR = 1
     PATCH = 0
 
-    STRING = [MAJOR, MINOR, TINY] * '.'
+    STRING = [MAJOR, MINOR, PATCH] * '.'
   end
 end
