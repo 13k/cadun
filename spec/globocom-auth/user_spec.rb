@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Cadun::User do
+describe GloboComAuth::User do
   
   def self.verify_method(method, value)
     describe "##{method}" do
@@ -15,10 +15,10 @@ describe Cadun::User do
   end
   
   context "when the user id is not given" do
-    subject { Cadun::User.new :ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID" }
+    subject { GloboComAuth::User.new :ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID" }
     
     it "should load the gateway" do
-      mock(Cadun::Gateway).new(hash_including(:ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID"))
+      mock(GloboComAuth::Gateway).new(hash_including(:ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID"))
       subject
     end
 
@@ -43,7 +43,7 @@ describe Cadun::User do
   end
   
   describe "#to_hash" do
-    subject { Cadun::User.new(:cadun_id => "10001000").to_hash }
+    subject { GloboComAuth::User.new(:cadun_id => "10001000").to_hash }
     
     specify { should include(:cadun_id => "10001000") }
     specify { should include(:name => "Guilherme Chico") }
@@ -67,18 +67,18 @@ describe Cadun::User do
   
   describe ".find_by_email" do
     context "given an email without domain" do
-      subject { Cadun::User.find_by_email("silvano") }
+      subject { GloboComAuth::User.find_by_email("silvano") }
       verify_method "id", "24510533"
     end
     
     context "given an email with domain" do
-      subject { Cadun::User.find_by_email("silvano@corp.globo.com") }
+      subject { GloboComAuth::User.find_by_email("silvano@corp.globo.com") }
       verify_method "id", "24510533"
     end
   end
   
   describe ".find_by_id" do
-    subject { Cadun::User.find_by_id("10001000") }
+    subject { GloboComAuth::User.find_by_id("10001000") }
     verify_method "id", "10001000"
   end
 end

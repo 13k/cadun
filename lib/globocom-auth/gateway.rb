@@ -1,4 +1,4 @@
-module Cadun
+module GloboComAuth
   class Gateway
     def initialize(options = {})
       @options = options 

@@ -1,12 +1,9 @@
 require 'spec_helper'
 
-describe Cadun::Config do
-  include Cadun
-
+describe GloboComAuth::Config do
   def self.verify_method(method, value)
     describe "##{method}" do
-      subject { Cadun::Config.send(method) }
-
+      subject { GloboComAuth::Config.send(method) }
       specify { should == value }
     end
   end
@@ -22,6 +19,7 @@ describe Cadun::Config do
   verify_method "auth_port", 8280
   
   context "when the file changes" do
+    
     before { load_another_config }
 
     verify_method "login_url", "https://login.globo.com/login"
