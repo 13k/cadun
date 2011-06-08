@@ -23,6 +23,7 @@ module Cadun
       elsif @options[:cadun_id]
         @options[:cadun_id]
       else
+        raise RuntimeError.new "not authorized" unless authorization.xpath("status").text == "AUTORIZADO"
         authorization.xpath("usuarioID").text
       end
       

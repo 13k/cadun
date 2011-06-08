@@ -12,7 +12,14 @@ describe Cadun::Gateway do
     before do
       mock(subject).connection { connection }
       
-      mock(subject).authorization { mock(mock).xpath("usuarioID") { mock(mock).text { "1" } } }
+      mock(subject).authorization do
+        mock(mock).xpath("status") { mock(mock).text { "AUTORIZADO" } }
+      end
+
+      mock(subject).authorization do
+        mock(mock).xpath("usuarioID") { mock(mock).text { "1" } }
+      end
+      
       mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><nome>Barack Obama</nome></pessoa>" }
       mock(connection).get("/cadunii/ws/resources/pessoa/1", { 'Content-Type' => 'text/xml' }) { response }
     end
@@ -23,6 +30,32 @@ describe Cadun::Gateway do
   end
   
   describe "#authorization" do
+    context "when status not AUTORIZADO" do
+      subject { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
+
+      before do
+        mock(subject).connection { connection }
+
+        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><status>NAO_AUTORIZADO</status><usuarioID>1</id></usuarioID>" }
+        mock(connection).put("/ws/rest/autorizacao", "<usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID>2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
+      end
+      
+      it { proc { subject.content }.should raise_error(RuntimeError, "not authorized") }
+    end
+
+    context "when status AUTORIZADO" do
+      subject { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
+
+      before do
+        mock(subject).connection.twice { connection }
+
+        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><status>AUTORIZADO</status><usuarioID>1</id></usuarioID>" }
+        mock(connection).put("/ws/rest/autorizacao", "<usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID>2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
+      end
+      
+      it { proc { subject.content }.should_not raise_error(RuntimeError, "not authorized") }
+    end
+
     context "when all information is given" do
       subject { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
       
@@ -36,6 +69,7 @@ describe Cadun::Gateway do
       it "should parse the authorization request" do
         subject.authorization.xpath('usuarioID').text.should == '1'
       end
+
     end
     
     context "when glb_id is not given" do
