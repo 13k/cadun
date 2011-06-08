@@ -34,6 +34,10 @@ module Cadun
     end
     
     def authorization_resource
+      [:glb_id, :ip, :service_id].each do |arg|
+        raise RuntimeError.new("#{arg} is missing") unless @options[arg]
+      end
+      
       put "/ws/rest/autorizacao", "<usuarioAutorizado><glbId>#{@options[:glb_id]}</glbId><ip>#{@options[:ip]}</ip><servicoID>#{@options[:service_id]}</servicoID></usuarioAutorizado>"
     end
     
