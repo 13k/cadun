@@ -23,39 +23,22 @@ describe Cadun::User do
     end
 
     verify_method "id", "21737810"
-
     verify_method "name", "Fabricio Rodrigo Lopes"
-
     verify_method "birthday", Date.new(1983, 02, 22)
-
     verify_method "phone", "21 22881060"
-
     verify_method "mobile", "21 99999999"
-
     verify_method "email", "fab1@spam.la"
-
     verify_method "gender", "MASCULINO"
-
     verify_method "city", "Rio de Janeiro"
-
     verify_method "state", "RJ"
-
     verify_method "status", "ATIVO"
-
     verify_method "address", "Rua Uruguai, 59"
-
     verify_method "neighborhood", "Andaraí"
-
     verify_method "cpf", "09532034765"
-
     verify_method "login", "fabricio_fab1"
-
     verify_method "country", "Brasil"
-
     verify_method "user_type", "NAO_ASSINANTE"
-    
     verify_method "cadun_id", "21737810"
-    
     verify_method "complement", "807"
   end
   
@@ -85,20 +68,17 @@ describe Cadun::User do
   describe ".find_by_email" do
     context "given an email without domain" do
       subject { Cadun::User.find_by_email("silvano") }
-      
       verify_method "id", "24510533"
     end
     
     context "given an email with domain" do
       subject { Cadun::User.find_by_email("silvano@corp.globo.com") }
-      
       verify_method "id", "24510533"
     end
   end
   
   describe ".find_by_id" do
     subject { Cadun::User.find_by_id("10001000") }
-
     verify_method "id", "10001000"
   end
 end

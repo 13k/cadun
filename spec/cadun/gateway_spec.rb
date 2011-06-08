@@ -7,87 +7,67 @@ describe Cadun::Gateway do
   before { load_config }
   
   describe "#content" do
-    subject { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
+    let(:gateway) { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
     
-    before do
-      mock(subject).connection { connection }
-      
-      mock(subject).authorization do
-        mock(mock).xpath("status") { mock(mock).text { "AUTORIZADO" } }
-      end
+    context "when status not AUTORIZADO" do
+      before do
+        mock(gateway).connection { connection }
 
-      mock(subject).authorization do
-        mock(mock).xpath("usuarioID") { mock(mock).text { "1" } }
+        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>NAO_AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>" }
+        mock(connection).put("/ws/rest/autorizacao", "<usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID>2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
       end
       
-      mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><nome>Barack Obama</nome></pessoa>" }
-      mock(connection).get("/cadunii/ws/resources/pessoa/1", { 'Content-Type' => 'text/xml' }) { response }
+      it { proc { gateway.content }.should raise_error(RuntimeError, "not authorized") }
     end
-    
-    it "should parse the resource" do
-      subject.content.xpath('nome').text.should == 'Barack Obama'
+
+    context "when status AUTORIZADO" do
+      before do
+        mock(gateway).connection.twice { connection }
+
+        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>" }
+        mock(connection).put("/ws/rest/autorizacao", "<usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID>2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
+        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><nome>Barack Obama</nome></pessoa>" }
+        mock(connection).get("/cadunii/ws/resources/pessoa/1", {'Content-Type' => 'text/xml'}) { response }
+      end
+      
+      it { proc { gateway.content }.should_not raise_error(RuntimeError, "not authorized") }
+      
+      it "should parse the resource" do
+        gateway.content.xpath('nome').text.should == 'Barack Obama'
+      end
     end
   end
   
   describe "#authorization" do
-    context "when status not AUTORIZADO" do
-      subject { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
-
-      before do
-        mock(subject).connection { connection }
-
-        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><status>NAO_AUTORIZADO</status><usuarioID>1</id></usuarioID>" }
-        mock(connection).put("/ws/rest/autorizacao", "<usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID>2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
-      end
-      
-      it { proc { subject.content }.should raise_error(RuntimeError, "not authorized") }
-    end
-
-    context "when status AUTORIZADO" do
-      subject { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
-
-      before do
-        mock(subject).connection.twice { connection }
-
-        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><status>AUTORIZADO</status><usuarioID>1</id></usuarioID>" }
-        mock(connection).put("/ws/rest/autorizacao", "<usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID>2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
-      end
-      
-      it { proc { subject.content }.should_not raise_error(RuntimeError, "not authorized") }
-    end
-
     context "when all information is given" do
-      subject { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
+      let(:gateway) { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
       
       before do
-        mock(subject).connection { connection }
+        mock(gateway).connection { connection }
 
         mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><usuarioID>1</id></usuarioID>" }
         mock(connection).put("/ws/rest/autorizacao", "<usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID>2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
       end
 
       it "should parse the authorization request" do
-        subject.authorization.xpath('usuarioID').text.should == '1'
+        gateway.authorization.xpath('usuarioID').text.should == '1'
       end
 
     end
     
     context "when glb_id is not given" do
-      subject { Cadun::Gateway.new }
-      
-      it { proc { subject.authorization }.should raise_error(RuntimeError, "glb_id is missing") }
+      let(:gateway) { Cadun::Gateway.new }
+      it { proc { gateway.authorization }.should raise_error(RuntimeError, "glb_id is missing") }
     end
     
     context "when ip is not given" do
-      subject { Cadun::Gateway.new(:glb_id => "1") }
-      
-      it { proc { subject.authorization }.should raise_error(RuntimeError, "ip is missing") }
+      let(:gateway) { Cadun::Gateway.new(:glb_id => "1") }
+      it { proc { gateway.authorization }.should raise_error(RuntimeError, "ip is missing") }
     end
     
     context "when service_id is not given" do
-      subject { Cadun::Gateway.new(:glb_id => "1", :ip => "1") }
-      
-      it { proc { subject.authorization }.should raise_error(RuntimeError, "service_id is missing") }
+      let(:gateway) { Cadun::Gateway.new(:glb_id => "1", :ip => "1") }
+      it { proc { gateway.authorization }.should raise_error(RuntimeError, "service_id is missing") }
     end
   end
 end
