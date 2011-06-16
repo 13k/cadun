@@ -14,7 +14,7 @@ describe GloboComAuth::Gateway do
         mock(gateway).connection { connection }
 
         mock(response).body { "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>NAO_AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>" }
-        mock(connection).put("/ws/rest/autorizacao", "<usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID>2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
+        mock(connection).put("/ws/rest/autorizacao", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID type=\"integer\">2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
       end
       
       it { proc { gateway.content }.should raise_error(RuntimeError, "not authorized") }
@@ -25,7 +25,7 @@ describe GloboComAuth::Gateway do
         mock(gateway).connection.twice { connection }
 
         mock(response).body { "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>" }
-        mock(connection).put("/ws/rest/autorizacao", "<usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID>2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
+        mock(connection).put("/ws/rest/autorizacao", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID type=\"integer\">2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
         mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><nome>Barack Obama</nome></pessoa>" }
         mock(connection).get("/cadunii/ws/resources/pessoa/1", {'Content-Type' => 'text/xml'}) { response }
       end
@@ -33,7 +33,7 @@ describe GloboComAuth::Gateway do
       it { proc { gateway.content }.should_not raise_error(RuntimeError, "not authorized") }
       
       it "should parse the resource" do
-        gateway.content.xpath('nome').text.should == 'Barack Obama'
+        gateway.content['nome'].should == 'Barack Obama'
       end
     end
   end
@@ -45,12 +45,12 @@ describe GloboComAuth::Gateway do
       before do
         mock(gateway).connection { connection }
 
-        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><usuarioID>1</id></usuarioID>" }
-        mock(connection).put("/ws/rest/autorizacao", "<usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID>2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
+        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>" }
+        mock(connection).put("/ws/rest/autorizacao", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID type=\"integer\">2626</servicoID></usuarioAutorizado>", {'Content-Type' => 'text/xml'}) { response }
       end
 
       it "should parse the authorization request" do
-        gateway.authorization.xpath('usuarioID').text.should == '1'
+        gateway.authorization['usuarioID'].should == '1'
       end
 
     end

@@ -1,15 +1,17 @@
 module GloboComAuth
   class Gateway
+    attr_reader :options
+    
     def initialize(options = {})
-      @options = options 
+      @options = options
     end
 
     def content
-      @content ||= Nokogiri::XML(content_resource).children
+      @content ||= Hash.from_xml(content_resource)["pessoa"]
     end
 
     def authorization
-      @authorization ||= Nokogiri::XML(authorization_resource).children
+      @authorization ||= Hash.from_xml(authorization_resource)["usuarioAutorizado"]
     end
 
     def connection
@@ -17,14 +19,16 @@ module GloboComAuth
     end
     
     protected
-    def content_resource
-      subject = if @options[:email]
-        "email/#{@options[:email]}"
-      elsif @options[:cadun_id]
-        @options[:cadun_id]
+    def content_resource      
+      subject = if options[:email]
+        "email/#{options[:email]}"
+        
+      elsif options[:cadun_id]
+        options[:cadun_id]
+        
       else
-        raise RuntimeError.new "not authorized" unless authorization.xpath("status").text == "AUTORIZADO"
-        authorization.xpath("usuarioID").text
+        raise RuntimeError.new "not authorized" unless authorization["status"] == "AUTORIZADO"
+        authorization["usuarioID"]
       end
       
       get "/cadunii/ws/resources/pessoa/#{subject}"
@@ -35,11 +39,9 @@ module GloboComAuth
     end
     
     def authorization_resource
-      [:glb_id, :ip, :service_id].each do |arg|
-        raise RuntimeError.new("#{arg} is missing") unless @options[arg]
-      end
+      [:glb_id, :ip, :service_id].each { |arg| raise RuntimeError.new("#{arg} is missing") unless options[arg] }
       
-      put "/ws/rest/autorizacao", "<usuarioAutorizado><glbId>#{@options[:glb_id]}</glbId><ip>#{@options[:ip]}</ip><servicoID>#{@options[:service_id]}</servicoID></usuarioAutorizado>"
+      put "/ws/rest/autorizacao", { "glbId" => options[:glb_id], "ip" => options[:ip], "servicoID" => options[:service_id] }.to_xml(:root => "usuarioAutorizado", :indent => 0)
     end
     
     def put(path, data)

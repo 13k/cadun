@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
   s.require_paths     = %w(lib)
   
   s.add_dependency 'nokogiri'
+  s.add_dependency 'active_support'
+  s.add_dependency 'builder'
   s.add_development_dependency 'rack'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'rr'

@@ -8,12 +8,9 @@ module GloboComAuth
       "tipoUsuario"              => "user_type", 
       "sexo"                     => "gender",
       "bairro"                   => "neighborhood", 
-      "cidade/nome"              => "city", 
-      "estado/sigla"             => "state",
-      "pais/nome"                => "country",
       "cep"                      => "zipcode",
       "complemento"              => "complement" }.each do |path, method|
-      define_method(method) { gateway.content.xpath(path).text }
+      define_method(method) { gateway.content[path] }
     end
     
     alias :id :cadun_id
@@ -47,12 +44,24 @@ module GloboComAuth
       "#{telefoneCelularDdd} #{telefoneCelular}"
     end
     
+    def country
+      pais['nome']
+    end
+    
+    def city
+      cidade['nome']
+    end
+    
+    def state
+      estado['sigla']
+    end
+    
     def to_hash      
       %w(cadun_id name email user_type gender neighborhood city state country address birthday phone mobile login cpf zipcode status complement).inject(Hash.new(0)) { |hash, method| hash[method.to_sym] = send(method); hash }
     end
     
     def method_missing(method)
-      gateway.content.xpath(method.to_s).text
+      gateway.content[method.to_s]
     end
   end
 end
