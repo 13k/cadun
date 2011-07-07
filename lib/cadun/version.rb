@@ -1,4 +1,4 @@
-module GloboComAuth
+module Cadun
   module VERSION
     MAJOR = 0
     MINOR = 1

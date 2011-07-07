@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe GloboComAuth::Config do
+describe Cadun::Config do
   def self.verify_method(method, value)
     describe "##{method}" do
-      subject { GloboComAuth::Config.send(method) }
+      subject { Cadun::Config.send(method) }
       specify { should == value }
     end
   end

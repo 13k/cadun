@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe GloboComAuth::Gateway do
+describe Cadun::Gateway do
   let(:connection) { mock }
   let(:response) { mock }
   
   before { load_config }
   
   describe "#content" do
-    let(:gateway) { GloboComAuth::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
+    let(:gateway) { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
     
     context "when status not AUTORIZADO" do
       before do
@@ -40,7 +40,7 @@ describe GloboComAuth::Gateway do
   
   describe "#authorization" do
     context "when all information is given" do
-      let(:gateway) { GloboComAuth::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
+      let(:gateway) { Cadun::Gateway.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
       
       before do
         mock(gateway).connection { connection }
@@ -56,17 +56,17 @@ describe GloboComAuth::Gateway do
     end
     
     context "when glb_id is not given" do
-      let(:gateway) { GloboComAuth::Gateway.new }
+      let(:gateway) { Cadun::Gateway.new }
       it { proc { gateway.authorization }.should raise_error(RuntimeError, "glb_id is missing") }
     end
     
     context "when ip is not given" do
-      let(:gateway) { GloboComAuth::Gateway.new(:glb_id => "1") }
+      let(:gateway) { Cadun::Gateway.new(:glb_id => "1") }
       it { proc { gateway.authorization }.should raise_error(RuntimeError, "ip is missing") }
     end
     
     context "when service_id is not given" do
-      let(:gateway) { GloboComAuth::Gateway.new(:glb_id => "1", :ip => "1") }
+      let(:gateway) { Cadun::Gateway.new(:glb_id => "1", :ip => "1") }
       it { proc { gateway.authorization }.should raise_error(RuntimeError, "service_id is missing") }
     end
   end

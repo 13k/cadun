@@ -1,4 +1,4 @@
-module GloboComAuth
+module Cadun
   class User
     attr_reader :gateway
     

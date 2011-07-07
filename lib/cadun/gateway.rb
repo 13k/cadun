@@ -1,4 +1,4 @@
-module GloboComAuth
+module Cadun
   class Gateway
     attr_reader :options
     

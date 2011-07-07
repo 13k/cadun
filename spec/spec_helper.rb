@@ -1,4 +1,4 @@
-require "#{File.dirname(__FILE__)}/../lib/globocom-auth"
+require "#{File.dirname(__FILE__)}/../lib/cadun"
 require 'fakeweb'
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
@@ -35,9 +35,9 @@ def stub_requests
 end
 
 def load_config
-  GloboComAuth::Config.load_file "#{File.dirname(__FILE__)}/support/fixtures/config.yml"
+  Cadun::Config.load_file "#{File.dirname(__FILE__)}/support/fixtures/config.yml"
 end
 
 def load_another_config
-  GloboComAuth::Config.load_file "#{File.dirname(__FILE__)}/support/fixtures/another_config.yml"
+  Cadun::Config.load_file "#{File.dirname(__FILE__)}/support/fixtures/another_config.yml"
 end
