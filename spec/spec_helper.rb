@@ -32,6 +32,10 @@ def stub_requests
                        
   FakeWeb.register_uri :get, "http://isp-authenticator.dev.globoi.com:8280/cadunii/ws/resources/pessoa/email/silvano@corp.globo.com", 
                        :body => "#{File.dirname(__FILE__)}/support/fixtures/email.xml"
+  
+ FakeWeb.register_uri :put, "http://isp-authenticator.dev.globoi.com:8280/service/provisionamento",
+                      [{ :body => "#{File.dirname(__FILE__)}/support/fixtures/provisionamento.json" }, { :code => 200 }]                    
+                       
 end
 
 def load_config

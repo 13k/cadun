@@ -18,6 +18,14 @@ module Cadun
       @connection ||= Net::HTTP.new(Config.auth_url, Config.auth_port)
     end
     
+    def provision(user_id, service_id)
+      path  = "/service/provisionamento"
+      data  = "{\"usuarioId\": \"#{user_id}\", \"servicoId\": \"#{service_id}\"}"
+      response = put(path, data, "application/json")
+      return false unless response.code == "200" 
+      return true
+    end
+    
     protected
     def content_resource      
       subject = if options[:email]
@@ -41,11 +49,14 @@ module Cadun
     def authorization_resource
       [:glb_id, :ip, :service_id].each { |arg| raise RuntimeError.new("#{arg} is missing") unless options[arg] }
       
-      put "/ws/rest/autorizacao", { "glbId" => options[:glb_id], "ip" => options[:ip], "servicoID" => options[:service_id] }.to_xml(:root => "usuarioAutorizado", :indent => 0)
+      response = put "/ws/rest/autorizacao", { "glbId" => options[:glb_id], "ip" => options[:ip], "servicoID" => options[:service_id] }.to_xml(:root => "usuarioAutorizado", :indent => 0)
+      response.body
     end
     
-    def put(path, data)
-      connection.put(path, data, {'Content-Type' => 'text/xml'}).body
+    def put(path, data, content_type = 'text/xml')
+      connection.put(path, data, {'Content-Type' => content_type})
     end
+    
+    
   end
 end

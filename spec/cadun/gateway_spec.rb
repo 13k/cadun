@@ -70,4 +70,32 @@ describe Cadun::Gateway do
       it { proc { gateway.authorization }.should raise_error(RuntimeError, "service_id is missing") }
     end
   end
+  
+  describe "#provision" do
+    let(:gateway) { Cadun::Gateway.new }
+    
+    context "when the service is provisioned to the user" do
+      before do
+        mock(gateway).connection { connection }
+
+        mock(response).code { "200" }
+        mock(connection).put("/service/provisionamento", "{\"usuarioId\": \"123456\", \"servicoId\": \"2515\"}", {'Content-Type' => 'application/json'}) { response }
+      end
+      
+      subject { gateway.provision(123456, 2515) }
+      specify { should be_true }
+    end
+    
+    context "when the service is provisioned to the user" do
+      before do
+        mock(gateway).connection { connection }
+
+        mock(response).code { "304" }
+        mock(connection).put("/service/provisionamento", "{\"usuarioId\": \"123456\", \"servicoId\": \"2515\"}", {'Content-Type' => 'application/json'}) { response }
+      end
+      
+      subject { gateway.provision(123456, 2515) }
+      specify { should be_false }
+    end
+  end
 end

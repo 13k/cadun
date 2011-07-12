@@ -60,6 +60,10 @@ module Cadun
       %w(cadun_id name email user_type gender neighborhood city state country address birthday phone mobile login cpf zipcode status complement).inject(Hash.new(0)) { |hash, method| hash[method.to_sym] = send(method); hash }
     end
     
+    def provision_to_service(service_id)
+      gateway.provision(self.id, service_id)
+    end
+    
     def method_missing(method)
       gateway.content[method.to_s]
     end

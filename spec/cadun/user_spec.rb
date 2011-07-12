@@ -65,6 +65,12 @@ describe Cadun::User do
     specify { should include(:complement => "807") }
   end
   
+  describe "#to_hash" do
+    subject { Cadun::User.new(:cadun_id => "10001000").provision_to_service(2626) }
+    
+    specify { should be_true }
+  end
+  
   describe ".find_by_email" do
     context "given an email without domain" do
       subject { Cadun::User.find_by_email("silvano") }
