@@ -65,10 +65,14 @@ describe Cadun::User do
     specify { should include(:complement => "807") }
   end
   
-  describe "#to_hash" do
-    subject { Cadun::User.new(:cadun_id => "10001000").provision_to_service(2626) }
-    
-    specify { should be_true }
+  describe "#provision_to_service" do
+    it "should call gateway's provision" do
+      mock(Cadun::Gateway).new(anything) { mock('gateway').provision(1, 6969) }
+      
+      user = Cadun::User.new
+      mock(user).id { 1 }
+      user.provision_to_service(6969)
+    end
   end
   
   describe ".find_by_email" do

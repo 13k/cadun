@@ -20,14 +20,12 @@ module Cadun
     
     def provision(user_id, service_id)
       path  = "/service/provisionamento"
-      data  = "{\"usuarioId\": \"#{user_id}\", \"servicoId\": \"#{service_id}\"}"
-      response = put(path, data, "application/json")
-      return false unless response.code == "200" 
-      return true
+      data  = %Q{{"usuarioId":"#{user_id}","servicoId":"#{service_id}"}}
+      put(path, data, "application/json").code == "200"
     end
     
     protected
-    def content_resource      
+    def content_resource
       subject = if options[:email]
         "email/#{options[:email]}"
         

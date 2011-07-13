@@ -79,7 +79,7 @@ describe Cadun::Gateway do
         mock(gateway).connection { connection }
 
         mock(response).code { "200" }
-        mock(connection).put("/service/provisionamento", "{\"usuarioId\": \"123456\", \"servicoId\": \"2515\"}", {'Content-Type' => 'application/json'}) { response }
+        mock(connection).put("/service/provisionamento", "{\"usuarioId\":\"123456\",\"servicoId\":\"2515\"}", {'Content-Type' => 'application/json'}) { response }
       end
       
       subject { gateway.provision(123456, 2515) }
@@ -91,7 +91,7 @@ describe Cadun::Gateway do
         mock(gateway).connection { connection }
 
         mock(response).code { "304" }
-        mock(connection).put("/service/provisionamento", "{\"usuarioId\": \"123456\", \"servicoId\": \"2515\"}", {'Content-Type' => 'application/json'}) { response }
+        mock(connection).put("/service/provisionamento", "{\"usuarioId\":\"123456\",\"servicoId\":\"2515\"}", {'Content-Type' => 'application/json'}) { response }
       end
       
       subject { gateway.provision(123456, 2515) }
