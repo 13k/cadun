@@ -18,22 +18,22 @@ RSpec.configure do |config|
 end
 
 def stub_requests
-  FakeWeb.register_uri :put, "http://isp-authenticator.dev.globoi.com:8280/ws/rest/autorizacao",
+  FakeWeb.register_uri :put, "http://isp-authenticator.qa01.globoi.com:8280/ws/rest/autorizacao",
                        :body => "#{File.dirname(__FILE__)}/support/fixtures/autorizacao.xml"
 
-  FakeWeb.register_uri :get, "http://isp-authenticator.dev.globoi.com:8280/cadunii/ws/resources/pessoa/21737810", 
+  FakeWeb.register_uri :get, "http://isp-authenticator.qa01.globoi.com:8280/cadunii/ws/resources/pessoa/21737810", 
                        :body => "#{File.dirname(__FILE__)}/support/fixtures/pessoa.xml"
                        
-  FakeWeb.register_uri :get, "http://isp-authenticator.dev.globoi.com:8280/cadunii/ws/resources/pessoa/10001000", 
+  FakeWeb.register_uri :get, "http://isp-authenticator.qa01.globoi.com:8280/cadunii/ws/resources/pessoa/10001000", 
                        :body => "#{File.dirname(__FILE__)}/support/fixtures/pessoa_2.xml"
                        
-  FakeWeb.register_uri :get, "http://isp-authenticator.dev.globoi.com:8280/cadunii/ws/resources/pessoa/email/silvano@globo.com", 
+  FakeWeb.register_uri :get, "http://isp-authenticator.qa01.globoi.com:8280/cadunii/ws/resources/pessoa/email/silvano@globo.com", 
                        :body => "#{File.dirname(__FILE__)}/support/fixtures/email.xml"
                        
-  FakeWeb.register_uri :get, "http://isp-authenticator.dev.globoi.com:8280/cadunii/ws/resources/pessoa/email/silvano@corp.globo.com", 
+  FakeWeb.register_uri :get, "http://isp-authenticator.qa01.globoi.com:8280/cadunii/ws/resources/pessoa/email/silvano@corp.globo.com", 
                        :body => "#{File.dirname(__FILE__)}/support/fixtures/email.xml"
   
- FakeWeb.register_uri :put, "http://isp-authenticator.dev.globoi.com:8280/service/provisionamento",
+ FakeWeb.register_uri :put, "http://isp-authenticator.qa01.globoi.com:8280/service/provisionamento",
                       [{ :body => "#{File.dirname(__FILE__)}/support/fixtures/provisionamento.json" }, { :code => 200 }]                    
                        
 end

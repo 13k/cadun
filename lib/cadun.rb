@@ -1,5 +1,3 @@
-$:.push File.expand_path('lib', __FILE__)
-
 require 'uri'
 require 'cgi'
 require 'net/http'
@@ -8,6 +6,8 @@ require 'date'
 require 'yaml'
 require 'singleton'
 require 'active_support/core_ext/hash'
-require 'cadun/gateway'
-require 'cadun/user'
-require 'cadun/config'
+require "#{File.dirname(__FILE__)}/cadun/gateway/base"
+require "#{File.dirname(__FILE__)}/cadun/gateway/authorization"
+require "#{File.dirname(__FILE__)}/cadun/gateway/provisioning"
+require "#{File.dirname(__FILE__)}/cadun/user"
+require "#{File.dirname(__FILE__)}/cadun/config"

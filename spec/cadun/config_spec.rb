@@ -10,11 +10,11 @@ describe Cadun::Config do
   
   before { load_config }
   
-  verify_method "login_url", "https://login.dev.globoi.com/login"
+  verify_method "login_url", "https://login.qa01.globoi.com/login"
                 
-  verify_method "logout_url", "https://login.dev.globoi.com/Servlet/do/logout"
+  verify_method "logout_url", "https://login.qa01.globoi.com/Servlet/do/logout"
                 
-  verify_method "auth_url", "isp-authenticator.dev.globoi.com"
+  verify_method "auth_url", "isp-authenticator.qa01.globoi.com"
                 
   verify_method "auth_port", 8280
   

@@ -18,7 +18,7 @@ describe Cadun::User do
     subject { Cadun::User.new :ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID" }
     
     it "should load the gateway" do
-      mock(Cadun::Gateway).new(hash_including(:ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID"))
+      mock(Cadun::Gateway::Authorization).new(hash_including(:ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID"))
       subject
     end
 
@@ -65,16 +65,6 @@ describe Cadun::User do
     specify { should include(:complement => "807") }
   end
   
-  describe "#provision_to_service" do
-    it "should call gateway's provision" do
-      mock(Cadun::Gateway).new(anything) { mock('gateway').provision(1, 6969) }
-      
-      user = Cadun::User.new
-      mock(user).id { 1 }
-      user.provision_to_service(6969)
-    end
-  end
-  
   describe ".find_by_email" do
     context "given an email without domain" do
       subject { Cadun::User.find_by_email("silvano") }
@@ -90,5 +80,15 @@ describe Cadun::User do
   describe ".find_by_id" do
     subject { Cadun::User.find_by_id("10001000") }
     verify_method "id", "10001000"
+  end
+  
+  describe "#provision_to_service" do
+    it "should call gateway's provision" do
+      mock(Cadun::Gateway::Provisioning).new(anything) { mock('gateway').provision(1, 6969) }
+      
+      user = Cadun::User.new
+      mock(user).id { 1 }
+      user.provision_to_service(6969)
+    end
   end
 end

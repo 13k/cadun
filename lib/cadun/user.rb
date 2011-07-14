@@ -1,6 +1,6 @@
 module Cadun
   class User
-    attr_reader :gateway
+    attr_reader :authorization_gateway, :provisioning_gateway
     
     { "id"                       => "cadun_id", 
       "nome"                     => "name", 
@@ -10,7 +10,7 @@ module Cadun
       "bairro"                   => "neighborhood", 
       "cep"                      => "zipcode",
       "complemento"              => "complement" }.each do |path, method|
-      define_method(method) { gateway.content[path] }
+      define_method(method) { authorization_gateway.content[path] }
     end
     
     alias :id :cadun_id
@@ -25,7 +25,8 @@ module Cadun
     end
     
     def initialize(options = {})
-      @gateway = Gateway.new(options)
+      @authorization_gateway = Gateway::Authorization.new(options)
+      @provisioning_gateway = Gateway::Provisioning.new(options)
     end
     
     def address
@@ -61,11 +62,11 @@ module Cadun
     end
     
     def provision_to_service(service_id)
-      gateway.provision(self.id, service_id)
+      provisioning_gateway.provision(self.id, service_id)
     end
     
     def method_missing(method)
-      gateway.content[method.to_s]
+      authorization_gateway.content[method.to_s]
     end
   end
 end
