@@ -13,8 +13,8 @@ describe Cadun::Gateway::Provisioning do
       before do
         mock(gateway).connection { connection }
 
-        mock(response).code { "200" }
-        mock(connection).put("/service/provisionamento", "{\"usuarioId\":\"123456\",\"servicoId\":\"2515\"}", {'Content-Type' => 'application/json'}) { response }
+        mock(response).status { 200 }
+        mock(connection).put("/service/provisionamento", "{\"usuarioId\":\"123456\",\"servicoId\":\"2515\"}") { response }
       end
     
       subject { gateway.provision(123456, 2515) }
@@ -25,8 +25,8 @@ describe Cadun::Gateway::Provisioning do
       before do
         mock(gateway).connection { connection }
 
-        mock(response).code { "304" }
-        mock(connection).put("/service/provisionamento", "{\"usuarioId\":\"123456\",\"servicoId\":\"2515\"}", {'Content-Type' => 'application/json'}) { response }
+        mock(response).status { 304 }
+        mock(connection).put("/service/provisionamento", "{\"usuarioId\":\"123456\",\"servicoId\":\"2515\"}") { response }
       end
     
       subject { gateway.provision(123456, 2515) }

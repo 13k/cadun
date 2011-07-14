@@ -15,11 +15,11 @@ Gem::Specification.new do |s|
   s.test_files        = `git ls-files -- {spec}/*`.split("\n")
   s.require_paths     = %w(lib)
   
-  s.add_dependency 'nokogiri'
   s.add_dependency 'active_support'
   s.add_dependency 'builder'
-  s.add_development_dependency 'rack'
+  s.add_dependency 'patron'
+  s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'rr'
-  s.add_development_dependency 'fakeweb'
+  s.add_development_dependency 'webmock'
 end

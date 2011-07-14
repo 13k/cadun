@@ -14,9 +14,7 @@ describe Cadun::Config do
                 
   verify_method "logout_url", "https://login.qa01.globoi.com/Servlet/do/logout"
                 
-  verify_method "auth_url", "isp-authenticator.qa01.globoi.com"
-                
-  verify_method "auth_port", 8280
+  verify_method "auth_url", "http://isp-authenticator.qa01.globoi.com:8280"
   
   context "when the file changes" do
     
@@ -26,8 +24,6 @@ describe Cadun::Config do
                   
     verify_method "logout_url", "https://login.globo.com/Servlet/do/logout"
                   
-    verify_method "auth_url", "autenticacao.globo.com"
-                  
-    verify_method "auth_port", 8080
+    verify_method "auth_url", "http://autenticacao.globo.com:8080"
   end
 end

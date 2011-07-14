@@ -1,12 +1,8 @@
-require 'uri'
-require 'cgi'
-require 'net/http'
-require 'nokogiri'
 require 'date'
 require 'yaml'
 require 'singleton'
+require 'patron'
 require 'active_support/core_ext/hash'
-require "#{File.dirname(__FILE__)}/cadun/gateway/base"
 require "#{File.dirname(__FILE__)}/cadun/gateway/authorization"
 require "#{File.dirname(__FILE__)}/cadun/gateway/provisioning"
 require "#{File.dirname(__FILE__)}/cadun/user"
