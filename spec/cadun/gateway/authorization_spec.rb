@@ -1,20 +1,18 @@
 require 'spec_helper'
 
 describe Cadun::Gateway::Authorization do
-  let(:connection) { mock }
   let(:response) { mock }
   
-  before { load_config }
+  before do 
+    load_config
+  end
   
   describe "#content" do
     let(:gateway) { Cadun::Gateway::Authorization.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
     
     context "when status not AUTORIZADO" do
       before do
-        mock(gateway).connection { connection }
-
-        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>NAO_AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>" }
-        mock(connection).put("/ws/rest/autorizacao", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID type=\"integer\">2626</servicoID></usuarioAutorizado>") { response }
+        FakeWeb.register_uri(:put, "http://isp-authenticator.qa01.globoi.com:8280/ws/rest/autorizacao", :body => "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>NAO_AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>")
       end
       
       it { proc { gateway.content }.should raise_error(RuntimeError, "not authorized") }
@@ -22,12 +20,8 @@ describe Cadun::Gateway::Authorization do
 
     context "when status AUTORIZADO" do
       before do
-        mock(gateway).connection.twice { connection }
-
-        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>" }
-        mock(connection).put("/ws/rest/autorizacao", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID type=\"integer\">2626</servicoID></usuarioAutorizado>") { response }
-        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><pessoa><nome>Barack Obama</nome></pessoa>" }
-        mock(connection).get("/cadunii/ws/resources/pessoa/1") { response }
+        FakeWeb.register_uri(:put, "http://isp-authenticator.qa01.globoi.com:8280/ws/rest/autorizacao", :body => "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>")
+        FakeWeb.register_uri(:get, "http://isp-authenticator.qa01.globoi.com:8280/cadunii/ws/resources/pessoa/1", :body => "<?xml version='1.0' encoding='utf-8'?><pessoa><nome>Barack Obama</nome></pessoa>")
       end
       
       it { proc { gateway.content }.should_not raise_error(RuntimeError, "not authorized") }
@@ -43,10 +37,7 @@ describe Cadun::Gateway::Authorization do
       let(:gateway) { Cadun::Gateway::Authorization.new(:glb_id => "GLB_ID", :ip => "127.0.0.1", :service_id => 2626) }
       
       before do
-        mock(gateway).connection { connection }
-
-        mock(response).body { "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>" }
-        mock(connection).put("/ws/rest/autorizacao", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID type=\"integer\">2626</servicoID></usuarioAutorizado>") { response }
+        FakeWeb.register_uri(:put, "http://isp-authenticator.qa01.globoi.com:8280/ws/rest/autorizacao", :body => "<?xml version=\"1.0\" encoding=\"UTF-8\"?><usuarioAutorizado><glbId>GLB_ID</glbId><ip>127.0.0.1</ip><servicoID type=\"integer\">2626</servicoID></usuarioAutorizado>", :body => "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>")
       end
 
       it "should parse the authorization request" do

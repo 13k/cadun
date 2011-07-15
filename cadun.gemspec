@@ -17,10 +17,11 @@ Gem::Specification.new do |s|
   
   s.add_dependency 'activesupport', '>= 3.0.0'
   s.add_dependency 'builder', '>= 2.1.2'
-  s.add_dependency 'patron', '~> 0.4.12'
+  s.add_dependency 'rest-client'
+  s.add_dependency 'json'
   s.add_dependency 'i18n'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'rr'
-  s.add_development_dependency 'webmock'
+  s.add_development_dependency 'fakeweb'
 end

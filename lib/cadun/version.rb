@@ -2,7 +2,7 @@ module Cadun
   module VERSION
     MAJOR = 0
     MINOR = 5
-    PATCH = 2
+    PATCH = 3
 
     STRING = [MAJOR, MINOR, PATCH] * '.'
   end

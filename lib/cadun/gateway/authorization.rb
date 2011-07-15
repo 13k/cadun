@@ -5,7 +5,6 @@ module Cadun
     
       def initialize(options = {})        
         @options = options
-        setup!
       end
 
       def content
@@ -29,23 +28,15 @@ module Cadun
           authorization["usuarioID"]
         end
       
-        connection.get("/cadunii/ws/resources/pessoa/#{subject}").body
+        RestClient.get("#{Config.auth_url}/cadunii/ws/resources/pessoa/#{subject}", :content_type => :xml)
       end
     
       def authorization_resource
         [:glb_id, :ip, :service_id].each { |arg| raise RuntimeError.new("#{arg} is missing") unless options[arg] }
+        
+        authorization_data = { "glbId" => options[:glb_id], "ip" => options[:ip], "servicoID" => options[:service_id] }.to_xml(:root => "usuarioAutorizado", :indent => 0)
       
-        connection.put("/ws/rest/autorizacao", {
-          "glbId" => options[:glb_id],
-          "ip" => options[:ip],
-          "servicoID" => options[:service_id]
-        }.to_xml(:root => "usuarioAutorizado", :indent => 0)).body
-      end
-      
-      def setup!
-        @connection = Patron::Session.new
-        @connection.base_url = Config.auth_url
-        @connection.headers['Content-Type'] = 'text/xml'
+        RestClient.put("#{Config.auth_url}/ws/rest/autorizacao", authorization_data, :content_type => :xml)
       end
     end
   end

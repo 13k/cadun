@@ -1,9 +1,6 @@
 require 'spec_helper'
 
-describe Cadun::Gateway::Provisioning do
-  let(:connection) { mock }
-  let(:response) { mock }
-  
+describe Cadun::Gateway::Provisioning do  
   before { load_config }
   
   describe "#provision" do
@@ -11,10 +8,7 @@ describe Cadun::Gateway::Provisioning do
   
     context "when the service is provisioned to the user" do
       before do
-        mock(gateway).connection { connection }
-
-        mock(response).status { 200 }
-        mock(connection).put("/service/provisionamento", "{\"usuarioId\":\"123456\",\"servicoId\":\"2515\"}") { response }
+        FakeWeb.register_uri(:put, "http://cadun-rest.qa01.globoi.com/service/provisionamento", :status => 200)
       end
     
       subject { gateway.provision(123456, 2515) }
@@ -23,10 +17,7 @@ describe Cadun::Gateway::Provisioning do
   
     context "when the service is provisioned to the user" do
       before do
-        mock(gateway).connection { connection }
-
-        mock(response).status { 304 }
-        mock(connection).put("/service/provisionamento", "{\"usuarioId\":\"123456\",\"servicoId\":\"2515\"}") { response }
+        FakeWeb.register_uri(:put, "http://cadun-rest.qa01.globoi.com/service/provisionamento", :status => 304)
       end
     
       subject { gateway.provision(123456, 2515) }
