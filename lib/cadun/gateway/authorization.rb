@@ -28,7 +28,7 @@ module Cadun
           authorization["usuarioID"]
         end
       
-        RestClient.get("#{Config.auth_url}/cadunii/ws/resources/pessoa/#{subject}", :content_type => :xml)
+        RestClient.get("#{Config.auth_url}/cadunii/ws/resources/pessoa/#{subject}", :content_type => "text/xml")
       end
     
       def authorization_resource
@@ -36,7 +36,7 @@ module Cadun
         
         authorization_data = { "glbId" => options[:glb_id], "ip" => options[:ip], "servicoID" => options[:service_id] }.to_xml(:root => "usuarioAutorizado", :indent => 0)
       
-        RestClient.put("#{Config.auth_url}/ws/rest/autorizacao", authorization_data, :content_type => :xml)
+        RestClient.put("#{Config.auth_url}/ws/rest/autorizacao", authorization_data, :content_type => "text/xml")
       end
     end
   end
