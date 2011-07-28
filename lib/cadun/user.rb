@@ -1,17 +1,13 @@
 module Cadun
-  class User
-    attr_reader :authorization_gateway, :provisioning_gateway
-    
-    { "id"                       => "cadun_id", 
-      "nome"                     => "name", 
-      "emailPrincipal"           => "email",
-      "tipoUsuario"              => "user_type", 
-      "sexo"                     => "gender",
-      "bairro"                   => "neighborhood", 
-      "cep"                      => "zipcode",
-      "complemento"              => "complement" }.each do |path, method|
-      define_method(method) { authorization_gateway.content[path] }
-    end
+  class User    
+    { "id"             => "cadun_id", 
+      "nome"           => "name", 
+      "emailPrincipal" => "email",
+      "tipoUsuario"    => "user_type", 
+      "sexo"           => "gender",
+      "bairro"         => "neighborhood", 
+      "cep"            => "zipcode",
+      "complemento"    => "complement" }.each { |path, method| define_method(method) { gateway.content[path] } }
     
     alias :id :cadun_id
     
@@ -25,8 +21,7 @@ module Cadun
     end
     
     def initialize(options = {})
-      @authorization_gateway = Gateway::Authorization.new(options)
-      @provisioning_gateway = Gateway::Provisioning.new(options)
+      @options = options
     end
     
     def address
@@ -58,15 +53,19 @@ module Cadun
     end
     
     def to_hash      
-      %w(cadun_id name email user_type gender neighborhood city state country address birthday phone mobile login cpf zipcode status complement).inject(Hash.new(0)) { |hash, method| hash[method.to_sym] = send(method); hash }
+      %w(address birthday cadun_id city complement country cpf email gender login mobile name neighborhood phone state status user_type zipcode).inject(Hash.new(0)) { |hash, method| hash[method.to_sym] = send(method); hash }
     end
     
     def provision_to_service(service_id)
-      provisioning_gateway.provision(self.id, service_id)
+      Gateway.provision(id, service_id)
     end
     
     def method_missing(method)
-      authorization_gateway.content[method.to_s]
+      gateway.content[method.to_s]
+    end
+    
+    def gateway
+      @gateway ||= Gateway.new(@options)
     end
   end
 end

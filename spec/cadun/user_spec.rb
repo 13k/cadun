@@ -17,8 +17,16 @@ describe Cadun::User do
   context "when the user id is not given" do
     subject { Cadun::User.new :ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID" }
     
-    it "should load the gateway" do
-      mock(Cadun::Gateway::Authorization).new(hash_including(:ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID"))
+    it "should load the gateway only when it's needed" do
+      mock(Cadun::Gateway).new(hash_including(:ip => "127.0.0.1", :service_id => 2626, :glb_id => "GLB_ID")) do 
+        mock(Cadun::Gateway).content { Hash.new }
+      end
+      
+      subject.login
+    end
+    
+    it "should not load the gateway when the user is initialized" do
+      dont_allow(Cadun::Gateway).new
       subject
     end
 
@@ -84,7 +92,7 @@ describe Cadun::User do
   
   describe "#provision_to_service" do
     it "should call gateway's provision" do
-      mock(Cadun::Gateway::Provisioning).new(anything) { mock('gateway').provision(1, 6969) }
+      mock(Cadun::Gateway).provision(1, 6969)
       
       user = Cadun::User.new
       mock(user).id { 1 }

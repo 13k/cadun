@@ -1,19 +1,9 @@
 module Cadun
-  class Config
-    include Singleton
-    
-    attr_accessor :config
-    
-    def initialize
-      @config = {}
-    end
-    
+  class Config    
     def self.load_file(path)
-      instance.config = YAML::load_file(path)
-    end
-    
-    def self.method_missing(method, *args)
-      instance.config['cadun'][method.to_s]
+      (class << self; self; end).instance_eval do
+        YAML::load_file(path)['cadun'].each { |key, value| define_method(key) { value } }
+      end
     end
   end
 end
