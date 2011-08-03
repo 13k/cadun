@@ -51,26 +51,33 @@ describe Cadun::User do
   end
   
   describe "#to_hash" do
-    subject { Cadun::User.new(:cadun_id => "10001000").to_hash }
+    context "when the user has all data" do
+      subject { Cadun::User.new(:cadun_id => "10001000").to_hash }
+
+      specify { should include(:cadun_id => "10001000") }
+      specify { should include(:name => "Guilherme Chico") }
+      specify { should include(:email => "fab1@spam.la") }
+      specify { should include(:user_type => "NAO_ASSINANTE") }
+      specify { should include(:gender => "MASCULINO") }
+      specify { should include(:neighborhood => "Andaraí") }
+      specify { should include(:city => "Rio de Janeiro") }
+      specify { should include(:state => "RJ") }
+      specify { should include(:country => "Brasil") }
+      specify { should include(:address => "Rua Uruguai, 59") }
+      specify { should include(:birthday => Date.new(1983, 02, 22)) }
+      specify { should include(:phone => "21 22881060") }
+      specify { should include(:mobile => "21 99999999") }
+      specify { should include(:login => "fabricio_fab1") }
+      specify { should include(:cpf => "09532034765") }
+      specify { should include(:zipcode => "20510060") }
+      specify { should include(:status => "ATIVO") }
+      specify { should include(:complement => "807") }
+    end
     
-    specify { should include(:cadun_id => "10001000") }
-    specify { should include(:name => "Guilherme Chico") }
-    specify { should include(:email => "fab1@spam.la") }
-    specify { should include(:user_type => "NAO_ASSINANTE") }
-    specify { should include(:gender => "MASCULINO") }
-    specify { should include(:neighborhood => "Andaraí") }
-    specify { should include(:city => "Rio de Janeiro") }
-    specify { should include(:state => "RJ") }
-    specify { should include(:country => "Brasil") }
-    specify { should include(:address => "Rua Uruguai, 59") }
-    specify { should include(:birthday => Date.new(1983, 02, 22)) }
-    specify { should include(:phone => "21 22881060") }
-    specify { should include(:mobile => "21 99999999") }
-    specify { should include(:login => "fabricio_fab1") }
-    specify { should include(:cpf => "09532034765") }
-    specify { should include(:zipcode => "20510060") }
-    specify { should include(:status => "ATIVO") }
-    specify { should include(:complement => "807") }
+    context "when the user has minimal data" do
+      subject { Cadun::User.find_by_email("fulano_adm_campanha@globomail.com").to_hash }
+      specify { should include(:cadun_id => "23370159") }
+    end
   end
   
   describe ".find_by_email" do
@@ -82,11 +89,6 @@ describe Cadun::User do
     context "given an email with domain" do
       subject { Cadun::User.find_by_email("silvano@corp.globo.com") }
       verify_method "id", "24510533"
-    end
-    
-    context "when the user has minimal data" do
-      subject { Cadun::User.find_by_email("fulano_adm_campanha@globomail.com").to_hash }
-      specify { should include(:cadun_id => "23370159") }
     end
   end
   
