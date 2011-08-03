@@ -83,6 +83,11 @@ describe Cadun::User do
       subject { Cadun::User.find_by_email("silvano@corp.globo.com") }
       verify_method "id", "24510533"
     end
+    
+    context "when the user has minimal data" do
+      subject { Cadun::User.find_by_email("fulano_adm_campanha@globomail.com").to_hash }
+      specify { should include(:cadun_id => "23370159") }
+    end
   end
   
   describe ".find_by_id" do

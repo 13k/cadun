@@ -24,6 +24,8 @@ def stub_requests
     :body => "#{File.dirname(__FILE__)}/support/fixtures/email.xml")
   FakeWeb.register_uri(:get, "http://isp-authenticator.qa01.globoi.com:8280/cadunii/ws/resources/pessoa/email/silvano@corp.globo.com", 
     :body => "#{File.dirname(__FILE__)}/support/fixtures/email.xml")
+  FakeWeb.register_uri(:get, "http://isp-authenticator.qa01.globoi.com:8280/cadunii/ws/resources/pessoa/email/fulano_adm_campanha@globomail.com", 
+    :body => "#{File.dirname(__FILE__)}/support/fixtures/email2.xml")  
   FakeWeb.register_uri(:put, "http://cadun-rest.qa01.globoi.com/service/provisionamento", 
     :body => "#{File.dirname(__FILE__)}/support/fixtures/provisionamento.json", :status => 200)
 end

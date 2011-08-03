@@ -41,15 +41,15 @@ module Cadun
     end
     
     def country
-      pais['nome']
+      pais['nome'] if pais
     end
     
     def city
-      cidade['nome']
+      cidade['nome'] if cidade
     end
     
     def state
-      estado['sigla']
+      estado['sigla'] if estado
     end
     
     def to_hash      
