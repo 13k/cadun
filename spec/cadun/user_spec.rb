@@ -75,8 +75,11 @@ describe Cadun::User do
     end
     
     context "when the user has minimal data" do
-      subject { Cadun::User.find_by_email("fulano_adm_campanha@globomail.com").to_hash }
-      specify { should include(:cadun_id => "23370159") }
+      subject { Cadun::User.find_by_email("fulano_adm_campanha@globomail.com") }
+      specify { subject.id.should == "23370159" }
+      specify { subject.city.should == nil }
+      specify { subject.state.should == nil }
+      specify { subject.country.should == nil }
     end
   end
   
