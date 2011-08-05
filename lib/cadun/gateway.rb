@@ -18,7 +18,7 @@ module Cadun
       subject = if opts[:email]; "email/#{opts[:email]}"
         elsif opts[:cadun_id]; opts[:cadun_id]
         else
-          raise RestClient::Unauthorized unless authorization["status"] == "AUTORIZADO"
+          raise Exception.new(authorization["status"]) unless authorization["status"] == "AUTORIZADO"
           authorization["usuarioID"]
         end
     

@@ -42,7 +42,7 @@ describe Cadun::Gateway do
         FakeWeb.register_uri(:put, "http://isp-authenticator.qa01.globoi.com:8280/ws/rest/autorizacao", :body => "<?xml version='1.0' encoding='utf-8'?><usuarioAutorizado><status>NAO_AUTORIZADO</status><usuarioID>1</usuarioID></usuarioAutorizado>")
       end
       
-      it { proc { gateway.content }.should raise_error(RestClient::Unauthorized) }
+      it { proc { gateway.content }.should raise_error(Exception) }
     end
 
     context "when status AUTORIZADO" do
@@ -51,7 +51,7 @@ describe Cadun::Gateway do
         FakeWeb.register_uri(:get, "http://isp-authenticator.qa01.globoi.com:8280/cadunii/ws/resources/pessoa/1", :body => "<?xml version='1.0' encoding='utf-8'?><pessoa><nome>Barack Obama</nome></pessoa>")
       end
       
-      it { proc { gateway.content }.should_not raise_error(RestClient::Unauthorized) }
+      it { proc { gateway.content }.should_not raise_error(Exception) }
       
       it "should parse the resource" do
         gateway.content['nome'].should == 'Barack Obama'
