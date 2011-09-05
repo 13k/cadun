@@ -3,7 +3,11 @@ module Cadun
     attr_reader :opts
   
     def self.provision(user_id, service_id)
-      RestClient.put("#{Config.restclient_url}/service/provisionamento", "{\"usuarioId\": \"#{user_id}\", \"servicoId\": \"#{service_id}\"}", :content_type => "text/javascript").code == 200
+      request = Curl::Easy.perform("#{Config.restclient_url}/service/provisionamento") do |curl|
+        curl.headers['Content-Type'] = 'application/json'
+        curl.http_put("{\"usuarioId\":\"#{user_id}\",\"servicoId\":\"#{service_id}\"}")
+      end
+      request.response_code == 200
     end
   
     def initialize(opts = {})        
@@ -22,7 +26,8 @@ module Cadun
           authorization["usuarioID"]
         end
     
-      RestClient.get("#{Config.auth_url}/cadunii/ws/resources/pessoa/#{subject}", :content_type => "text/xml")
+      request = Curl::Easy.perform("#{Config.auth_url}/cadunii/ws/resources/pessoa/#{subject}")
+      request.body_str
     end
     
     def authorization
@@ -33,7 +38,11 @@ module Cadun
       %w(glb_id ip service_id).each { |i| raise ArgumentError.new("#{i} is missing") unless opts[i.to_sym] }
       authorization_data = { "glbId" => opts[:glb_id], "ip" => opts[:ip], "servicoID" => opts[:service_id] }.to_xml(:root => "usuarioAutorizado", :indent => 0)
     
-      RestClient.put("#{Config.auth_url}/ws/rest/autorizacao", authorization_data, :content_type => "text/xml")
+      request = Curl::Easy.perform("#{Config.auth_url}/ws/rest/autorizacao") do |curl|
+        curl.headers['Content-Type'] = 'application/xml'
+        curl.http_put(authorization_data)
+      end
+      request.body_str
     end
   end
 end

@@ -1,7 +1,6 @@
 require 'date'
 require 'yaml'
-require 'rest_client'
-require 'json'
+require 'curb'
 require 'active_support/core_ext/hash'
 require 'active_support/core_ext/object'
 require "#{File.dirname(__FILE__)}/cadun/gateway"
