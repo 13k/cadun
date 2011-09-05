@@ -3,14 +3,14 @@ module Cadun
     attr_reader :opts
   
     def self.provision(user_id, service_id)
-      request = Curl::Easy.perform("#{Config.restclient_url}/service/provisionamento") do |curl|
+      request = Curl::Easy.http_put("#{Config.restclient_url}/service/provisionamento", "{\"usuarioId\":\"#{user_id}\",\"servicoId\":\"#{service_id}\"}") do |curl|
         curl.headers['Content-Type'] = 'application/json'
-        curl.http_put("{\"usuarioId\":\"#{user_id}\",\"servicoId\":\"#{service_id}\"}")
       end
+      
       request.response_code == 200
     end
   
-    def initialize(opts = {})        
+    def initialize(opts = {})
       @opts = opts
     end
     
@@ -38,10 +38,10 @@ module Cadun
       %w(glb_id ip service_id).each { |i| raise ArgumentError.new("#{i} is missing") unless opts[i.to_sym] }
       authorization_data = { "glbId" => opts[:glb_id], "ip" => opts[:ip], "servicoID" => opts[:service_id] }.to_xml(:root => "usuarioAutorizado", :indent => 0)
     
-      request = Curl::Easy.perform("#{Config.auth_url}/ws/rest/autorizacao") do |curl|
-        curl.headers['Content-Type'] = 'application/xml'
-        curl.http_put(authorization_data)
+      request = Curl::Easy.http_put("#{Config.auth_url}/ws/rest/autorizacao", authorization_data) do |curl|
+        curl.headers['Content-Type'] = 'text/xml'
       end
+
       request.body_str
     end
   end
