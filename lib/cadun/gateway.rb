@@ -19,15 +19,20 @@ module Cadun
     end
   
     def content_resource
-      subject = if opts[:email]; "email/#{opts[:email]}"
-        elsif opts[:cadun_id]; opts[:cadun_id]
-        else
-          raise Exception.new(authorization["status"]) unless authorization["status"] == "AUTORIZADO"
-          authorization["usuarioID"]
-        end
+      Curl::Easy.perform("#{Config.auth_url}/cadunii/ws/resources/pessoa/#{subject}").body_str
+    end
     
-      request = Curl::Easy.perform("#{Config.auth_url}/cadunii/ws/resources/pessoa/#{subject}")
-      request.body_str
+    def subject
+      if opts[:email]; "email/#{opts[:email]}"
+      elsif opts[:cadun_id]; opts[:cadun_id]
+      else
+        raise Exception.new(authorization["status"]) unless authorized?
+        authorization["usuarioID"]
+      end
+    end
+    
+    def authorized?
+      authorization["status"] == "AUTORIZADO"
     end
     
     def authorization
@@ -36,6 +41,7 @@ module Cadun
   
     def authorization_resource
       %w(glb_id ip service_id).each { |i| raise ArgumentError.new("#{i} is missing") unless opts[i.to_sym] }
+      
       authorization_data = { "glbId" => opts[:glb_id], "ip" => opts[:ip], "servicoID" => opts[:service_id] }.to_xml(:root => "usuarioAutorizado", :indent => 0)
     
       request = Curl::Easy.http_put("#{Config.auth_url}/ws/rest/autorizacao", authorization_data) do |curl|
