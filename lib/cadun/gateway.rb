@@ -22,7 +22,8 @@ module Cadun
     end
 
     def content_resource
-      Faraday.get("#{Config.auth_url}/cadunii/ws/resources/pessoa/#{subject}").body
+      connection = Faraday::Connection.new Config.auth_url, :ssl => { :verify => false }
+      connection.get("/cadunii/ws/resources/pessoa/#{subject}").body
     end
 
     def subject
